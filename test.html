@@ -1,0 +1,71 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" charset="utf-8" content="initial-scale=1, width=device-width, height=device-height" />    
+    <title>MobiControl Enrollment</title>
+    
+   
+</head>
+<body>
+    
+<script>
+    var NativeAppLauncher = (function ($) {
+        var BrowserChecker = function () {
+            var userAgent = window.navigator.userAgent.toLowerCase();
+            var isIOS = function () {
+                return navigator.userAgent.match('iPad') || navigator.userAgent.match('iPhone') || navigator.userAgent.match('iPod') || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+            };
+            var isAndroid = function () {
+                return userAgent.indexOf('android') > -1;
+            };
+            return {
+                isIOS: isIOS(),
+                isAndroid: isAndroid(),
+            }
+        };
+        var Init = function (settings) {
+            setTimeout(function () {
+                if (BrowserChecker().isIOS) {
+                    window.location = settings.appUri;
+                    timeout = setTimeout(function () {
+                        window.location.replace(settings.iOsAppStore);
+                    }, 1000);
+                } else if (BrowserChecker().isAndroid) {
+                    window.location.replace(settings.androidAppUri);
+                    setTimeout(function () {
+                        window.location = settings.androidAppStore;
+                    }, 1000);
+                }
+
+            }, 1000);
+        };
+        return {
+            init: Init,
+            browserChecker: BrowserChecker
+        };
+    })();
+    var launchApp = function () {
+        NativeAppLauncher.init({
+            appUri: 'mobicontrol://conditionalaccess?partner=microsoft&tenantid=72c12082-311c-46b6-a109-3e9a7a53a68b',
+            androidAppUri: 'MobiControl://conditionalaccess?partner=microsoft&tenantid=72c12082-311c-46b6-a109-3e9a7a53a68b',
+            androidAppStore: 'https://play.google.com/store/apps/details?id=net.soti.mobicontrol.androidwork',
+            iOsAppStore: 'itms-apps://itunes.apple.com/app/my-app/id423660710?mt=8',
+        });
+    };
+</script>
+<div id="General_BOX" class="clearfix">
+    <div id="primaryContainer" class="primaryContainer clearfix">
+        <div id="box2" class="box clearfix">
+            <p id="text">
+                Please choose from one of the following options:<br />
+            </p>
+            <a id="registerButton" onclick="launchApp()" href="#" style="visibility: visible">
+                <input id="input2" class="button" type="button" value="Register with Azure" />
+            </a>
+        </div>
+    </div>
+</div>
+    </div>
+</body>
+</html>
