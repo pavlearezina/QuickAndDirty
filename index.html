@@ -24,13 +24,29 @@
                 isAndroid: isAndroid(),
             }
         };
+        var getCorrectVersion = function () {
+            var v = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
+
+            if (v != null && v !== undefined) {
+                return [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)];
+            }
+            else {
+                return [11, 0, 0];
+            }
+            };
         var Init = function (settings) {
-            setTimeout(function () {
+             setTimeout(function () {
                 if (BrowserChecker().isIOS) {
-                    window.location = settings.appUri;
-                    timeout = setTimeout(function () {
-                        window.location.replace(settings.iOsAppStore);
-                    }, 1000);
+                    var ver =getCorrectVersion();
+                    if (ver[0] >= 11) {
+                        window.location = settings.appUri;
+                        timeout = setTimeout(function () {
+                            window.location.replace(settings.iOsAppStore);
+                        }, 1000);
+                    }
+                    else {
+                        window.alert("Azure Registration is not supported on your device because it requires iOS 11 or higher. Please update to a supported version of iOS and try again.");
+                    }
                 } else if (BrowserChecker().isAndroid) {
                     window.location.replace(settings.androidAppUri);
                     setTimeout(function () {
